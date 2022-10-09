@@ -53,24 +53,42 @@ bool sudokuTable::checkCol(int num, int col){
 
 //takes in a number, row index, and a column index, checks the 3x3 square of the sudoku table
 bool sudokuTable::checkBox(int num, int row, int col){
-    for(int i = row/3; i < row/3+3; i++){
-        for(int j = col/3; i < col/3+3; j++){
-            if(table[row][col] == num)
+    int x = row - row%3;
+    int y = col - col%3;
+    for(int i = x; i < x+3; i++){
+        for(int j = y; j < y+3; j++){
+            if(table[i][j] == num)
                 return false;
         }
     }
     return true;
 }
 
-bool sudokuTable::solveTable(int x, int y){
-    //should recursively go through the table, find empty (0) values and try every number for a solution 
-    if(table[x][y] == 0){
-        for(int i = 1; i <= 9; ++i){
-            
+//recursively go through the table, find empty (0) values and try every number for a solution 
+bool sudokuTable::solveTable(int row, int col){
+    
+    if(row == 8 && col == 9){
+        return true;
+    }
+    if(col == 9){
+        return solveTable(row+1, 0);
+    }
+    if(table[row][col] !=0){
+        return solveTable(row, col+1);
+    }
+    // //iterates through the possible values at a given cell, if no numbers work, then it is invalid. Once the original case is reached and no numbers work, false.
+    for(int i =1; i < 10; i ++){
+        if(checkRow(i, row) && checkCol(i,col) && checkBox(i, row, col)){
+            table[row][col] = i;
+            std::cout << "row: " << row << " col: " << col << " num: " << i << std::endl;
+            if(solveTable(row, col+1)){
+                return true;
+            }
+
         }
-    }else{
         
     }
+    table[row][col] = 0;
     return false;
 }
 
