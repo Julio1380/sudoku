@@ -80,7 +80,6 @@ bool sudokuTable::solveTable(int row, int col){
     for(int i =1; i < 10; i ++){
         if(checkRow(i, row) && checkCol(i,col) && checkBox(i, row, col)){
             table[row][col] = i;
-            std::cout << "row: " << row << " col: " << col << " num: " << i << std::endl;
             if(solveTable(row, col+1)){
                 return true;
             }
