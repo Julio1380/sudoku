@@ -4,8 +4,9 @@
 #include <iostream>
 
 class sudokuTable{
-    std::vector<std::vector<int>> table = std::vector<std::vector<int>>(9, std::vector<int>(9,0));;
-    
+    std::vector<std::vector<int>> table;
+    int solutions;
+    int size;
     bool checkRow(int, int);
     bool checkCol(int, int);
     bool checkBox(int, int, int);
@@ -20,10 +21,10 @@ public:
     */
    
     sudokuTable(std::vector<std::vector<int>>&);
-    sudokuTable();
+    sudokuTable(int);
     sudokuTable(const sudokuTable&);
+    sudokuTable& operator=(const sudokuTable&);
     bool solveTable(int, int);
-    
     friend std::ostream& operator<<(std::ostream&, const sudokuTable&); 
     ~sudokuTable();
 };

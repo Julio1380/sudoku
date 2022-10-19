@@ -17,7 +17,7 @@ int main(){
 
     //sample sudoku table for test purposes
     sudokuTable test = sudokuTable(sample_table);
-    std::cout << test << std::endl;
+    
     if(test.solveTable(0,0)==false){
         std::cout << "No solution found." << std::endl;
         
