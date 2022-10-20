@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <vector>
 #include <cmath>
+#include <random>
 
 
 //standard constructor for sudokuTable objects.
@@ -34,12 +35,12 @@ sudokuTable& sudokuTable::operator=(const sudokuTable& other){
     return *this;
 }
 
-//destructor
+//Destructor
 sudokuTable::~sudokuTable(){
 
 }
 
-//copy constructor
+//Copy constructor
 sudokuTable::sudokuTable(const sudokuTable& oldTable){
     size = oldTable.size;
     for(int i = 0; i < size; ++i){
@@ -49,7 +50,7 @@ sudokuTable::sudokuTable(const sudokuTable& oldTable){
     }
 }
 
-//takes in a number and a row index and pointer to the main sudoku table, returns if the value can validly be inserted into the row
+//Recieves a number and its row. Checks whether that number is already present in the row.
 bool sudokuTable::checkRow(int num, int row){
     for(int i = 0; i < size; i ++){
         if(table[row][i] == num)
@@ -58,7 +59,7 @@ bool sudokuTable::checkRow(int num, int row){
     return true;
 }
 
-//takes in a number and a column index and a pointer to the main sudoku table, returns if the value can validly be inserted into the column
+//Recieves a number and its column. Checks whether that number is already present in the column.
 bool sudokuTable::checkCol(int num, int col){
     for(int i = 0; i < size; i ++){
         if(table[i][col] == num)
@@ -67,7 +68,7 @@ bool sudokuTable::checkCol(int num, int col){
     return true;
 }
 
-//takes in a number, row index, and a column index, checks the 3x3 square of the sudoku table
+//Recieves a number, its row, and its column. Checks whether that number is already present in the box.
 bool sudokuTable::checkBox(int num, int row, int col){
     if(size == 6){
         int x = row - row % 2;
@@ -90,6 +91,40 @@ bool sudokuTable::checkBox(int num, int row, int col){
         }
     }
     return true;
+}
+
+//Clears the sudoku table to default value of 0
+void sudokuTable::clearTable(){
+    for(int i = 0; i < size; ++i){
+        for(int j = 0; j < size; ++j){
+            table[i][j] = 0;
+        }
+    }
+}
+
+//Recursively goes through the table, uses RNG to generate values and checks if the value is present. Uses a vector to track if the value has already been attempted
+void sudokuTable::generateTable(int row, int col){
+    std::vector<bool> checked(9, false);
+    int amountChecked = 0;
+    
+    //random number generator
+    std::random_device seed;
+    std::mt19937 newSeed(seed());
+    std::uniform_int_distribution<std::mt19937::result_type> num(1,size);
+
+    int val;
+
+    while(amountChecked<size){
+        val = num(newSeed);
+        if(checked[val] == false){
+            checked[val] = true;
+            amountChecked++;
+            if(checkRow(val, row) && checkCol(val, col) && checkBox(val, row, col)){
+                
+            }
+        }   
+    }
+    
 }
 
 //recursively go through the table, find empty (0) values and try every number for a solution 

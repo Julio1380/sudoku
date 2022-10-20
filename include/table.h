@@ -10,8 +10,9 @@ class sudokuTable{
     bool checkRow(int, int);
     bool checkCol(int, int);
     bool checkBox(int, int, int);
-
-
+    void clearTable();
+    void generateTable(int, int);
+    
 public:
     /*the check methods should be private
     the initial input should be public
