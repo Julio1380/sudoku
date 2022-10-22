@@ -5,27 +5,31 @@
 
 class sudokuTable{
     std::vector<std::vector<int>> table;
-    int solutions;
+    std::vector<std::vector<int>> solution;
     int size;
+    bool hasValidTable;
+    enum difficulties{
+        Easy,
+        Medium, 
+        Hard
+    };
+    difficulties rating;
     bool checkRow(int, int);
     bool checkCol(int, int);
     bool checkBox(int, int, int);
     void clearTable();
-    void generateTable(int, int);
     
 public:
-    /*the check methods should be private
-    the initial input should be public
-    printer should be public
-    the method to solve the table should be public, but
 
-    */
-   
+    void enterValue(int,int,int);
+    void generateTable(int, int);
+    void generatePuzzle();
+    int getDifficulty();
     sudokuTable(std::vector<std::vector<int>>&);
     sudokuTable(int);
     sudokuTable(const sudokuTable&);
     sudokuTable& operator=(const sudokuTable&);
-    bool solveTable(int, int);
+    void solveTable(int, int, int&);
     friend std::ostream& operator<<(std::ostream&, const sudokuTable&); 
     ~sudokuTable();
 };
