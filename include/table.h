@@ -18,13 +18,16 @@ class sudokuTable{
     bool checkCol(int, int);
     bool checkBox(int, int, int);
     void clearTable();
+    void generateTable(int, int);
+    void generatePuzzle();
     
 public:
 
     void enterValue(int,int,int);
-    void generateTable(int, int);
-    void generatePuzzle();
+    void createNewPuzzle();
     int getDifficulty();
+    bool checkSolved();
+    std::vector<std::vector<int>> invalidSquares();
     sudokuTable(std::vector<std::vector<int>>&);
     sudokuTable(int);
     sudokuTable(const sudokuTable&);

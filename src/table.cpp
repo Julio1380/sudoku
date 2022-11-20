@@ -157,11 +157,6 @@ void sudokuTable::generateTable(int row, int col){
     }    
 }
 
-//Enters values into the table coordinates, modifies the table.
-void sudokuTable::enterValue(int value, int row, int col){
-    table[row][col] = value;
-}
-
 //goes through the table and finds random coordinates, 
 //once more than one solution can be found, undo the last modification and change the difficulty
 
@@ -194,9 +189,45 @@ void sudokuTable::generatePuzzle(){
     }
 }
 
+//Enters values into the table coordinates, modifies the table.
+void sudokuTable::enterValue(int value, int row, int col){
+    table[row][col] = value;
+}
+
+//Clears the table and generates a new puzzle in the table. 
+void sudokuTable::createNewPuzzle(){
+    clearTable();
+    generateTable(0,0);
+    generatePuzzle();
+}
+
 //returns the difficulty of the puzzle
 int sudokuTable::getDifficulty(){
     return rating;
+}
+
+//checks if the table is solved
+bool sudokuTable::checkSolved(){
+    for(int i = 0; i < size; ++i){
+        for(int j = 0; j < size; ++j){
+            if(table[i][j] != solution[i][j]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+//returns a table that shows all wrong numbers
+std::vector<std::vector<int>> sudokuTable::invalidSquares(){
+    std::vector<std::vector<int>> invalid(size, std::vector<int>(size, 0));
+    for(int i = 0; i < size; ++i){
+        for(int j = 0; j < size; ++j){
+            if(table[i][j] != 0 && table[i][j] != solution[i][j]){
+                invalid[i][j] = 1;
+            }
+        }
+    }
 }
 
 //recursively go through the table, find empty (0) values and try every number to find the amount of solutions. Table is not modified as a result.
