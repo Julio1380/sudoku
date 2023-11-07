@@ -4,9 +4,11 @@ project(sudokuApp VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
-
+## Adds directory link
 add_subdirectory(src)
 
+
+## Creates executable, links directories to executable
 add_executable(sudokuApp main.cpp)
 target_link_libraries(sudokuApp PRIVATE sudoku)
 target_include_directories(sudokuApp PRIVATE include)

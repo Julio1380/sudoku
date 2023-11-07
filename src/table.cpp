@@ -7,7 +7,7 @@
 #include <random>
 
 
-//standard constructor for sudokuTable objects.
+//Standard constructor for sudokuTable objects.
 sudokuTable::sudokuTable(int nums){
     size = nums;
     table = std::vector<std::vector<int>>(size,std::vector<int>(size,0));
@@ -15,7 +15,7 @@ sudokuTable::sudokuTable(int nums){
     hasValidTable = false;
 }
 
-//constructor from existing table
+// Constructor using existing table, non Sudoku object
 sudokuTable::sudokuTable(std::vector<std::vector<int>>& sourceTable){
     size = sourceTable.size();
     table = std::vector<std::vector<int>>(size,std::vector<int>(size,0));
@@ -33,6 +33,7 @@ sudokuTable::sudokuTable(std::vector<std::vector<int>>& sourceTable){
     }
 }
 
+// Equality overload
 sudokuTable& sudokuTable::operator=(const sudokuTable& other){
     size = other.size;
     table = std::vector<std::vector<int>>(size, std::vector<int>(size,0));
@@ -157,7 +158,7 @@ void sudokuTable::generateTable(int row, int col){
     }    
 }
 
-//goes through the table and finds random coordinates, 
+//goes through the table and finds random coordinates to remove value, 
 //once more than one solution can be found, undo the last modification and change the difficulty
 
 void sudokuTable::generatePuzzle(){
@@ -218,7 +219,7 @@ bool sudokuTable::checkSolved(){
     return true;
 }
 
-//returns a table that shows all wrong numbers
+//Returns a table that shows all incorrect values
 std::vector<std::vector<int>> sudokuTable::invalidSquares(){
     std::vector<std::vector<int>> invalid(size, std::vector<int>(size, 0));
     for(int i = 0; i < size; ++i){
@@ -228,6 +229,7 @@ std::vector<std::vector<int>> sudokuTable::invalidSquares(){
             }
         }
     }
+    return invalid;
 }
 
 //recursively go through the table, find empty (0) values and try every number to find the amount of solutions. Table is not modified as a result.
@@ -279,3 +281,5 @@ std::ostream& operator<<(std::ostream& os, const sudokuTable& game){
     }
     return os;
 }
+
+//Hint system can just find a random value within the array 0 and push the solution value in.

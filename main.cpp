@@ -8,5 +8,6 @@ int main(){
     //sample sudoku table for test purposes
     sudokuTable test(9);
     
+    std::cout<< "hello"<< std::endl;
     return 0;
 }
