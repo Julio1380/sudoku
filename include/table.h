@@ -27,6 +27,11 @@ public:
     void createNewPuzzle();
     int getDifficulty();
     bool checkSolved();
+    int getSize();
+    void checkPuzzle();
+    void checkRow(int);
+    void checkCol(int);
+    void checkTile(int, int);
     std::vector<std::vector<int>> invalidSquares();
     sudokuTable(std::vector<std::vector<int>>&);
     sudokuTable(int);
@@ -34,6 +39,8 @@ public:
     sudokuTable& operator=(const sudokuTable&);
     void solveTable(int, int, int&);
     friend std::ostream& operator<<(std::ostream&, const sudokuTable&); 
+    void getHint();
+    void copySolution();
     ~sudokuTable();
 };
 

@@ -122,7 +122,9 @@ void sudokuTable::clearTable(){
     hasValidTable = false;
 }
 
-//Recursively goes through the table, uses RNG to generate values and checks if the value is present. Uses a vector to track if the value has already been attempted
+//Recursively goes through the table, uses RNG to generate values and checks 
+//if the value is present. Uses a vector to track if the value has already been attempted
+// in a particular spot in a particular arrangement
 void sudokuTable::generateTable(int row, int col){
     if(row == (size-1) && col == size){
         hasValidTable = true;
@@ -150,6 +152,7 @@ void sudokuTable::generateTable(int row, int col){
                 table[row][col] = val;
                 generateTable(row, col+1);
                 if(hasValidTable == true){
+                    solution = table;
                     return;
                 }
                 table[row][col] = 0;
@@ -219,6 +222,48 @@ bool sudokuTable::checkSolved(){
     return true;
 }
 
+int sudokuTable::getSize(){
+    return size;
+}
+
+// Checks the working table for correctness, removes any errors
+void sudokuTable::checkPuzzle(){
+    for (int i = 0; i < size; i++){
+        for (int j = 0; j < size; j++){
+            if(table[i][j] != solution[i][j]){
+                table[i][j] = 0;
+            }
+        }
+    }
+}
+
+// Checks a tile for correctness, removes if an error
+void sudokuTable::checkTile(int row, int col){
+    if(table[row][col] != solution[row][col]){
+        table[row][col] = 0;
+    }
+}
+
+// Checks a row for correctness, removes errors
+void sudokuTable::checkRow(int row){
+    for (int i = 0; i < size; i++){
+        if(table[row][i] != solution[row][i]){
+            table[row][i] = 0;
+        }
+    }
+}
+
+// Checks a column for correctness, removes errors
+void sudokuTable::checkCol(int col){
+    for (int i = 0; i < size; i++){
+        if(table[col][i] != solution[col][i]){
+            table[col][i] = 0;
+        }
+    }
+}
+
+
+
 //Returns a table that shows all incorrect values
 std::vector<std::vector<int>> sudokuTable::invalidSquares(){
     std::vector<std::vector<int>> invalid(size, std::vector<int>(size, 0));
@@ -239,9 +284,6 @@ void sudokuTable::solveTable(int row, int col, int& numSolutions){
     }
     if(row == (size-1) && col == size){
         numSolutions++;
-        if(numSolutions ==1){
-            solution = table;
-        }
     }else if(col == size){
         solveTable(row+1, 0, numSolutions);
     }else if(table[row][col] !=0){
@@ -282,4 +324,36 @@ std::ostream& operator<<(std::ostream& os, const sudokuTable& game){
     return os;
 }
 
-//Hint system can just find a random value within the array 0 and push the solution value in.
+// Hint system. Finds an unsolved location in the current sudoku table and pushes a solved value to it.
+void sudokuTable::getHint(){
+    if(checkSolved()){
+        std::cout << "Puzzle Already Solved!" << std::endl;
+    }
+
+    //random number generator
+    std::random_device seed;
+    std::mt19937 newSeed(seed());
+    std::uniform_int_distribution<std::mt19937::result_type> num(1,size);
+    
+    int row = num(newSeed);
+    int col = num(newSeed);
+
+    // Find an unsolved location
+    while(table[row][col] != 0){
+        col++;
+        if(col == size){
+            row ++;
+            col = 0;
+            if(row == size){
+                row = 0;
+            }
+        }
+    }
+
+    table[row][col] = solution[row][col];
+
+}
+
+void sudokuTable::copySolution(){
+    table = solution;
+}
