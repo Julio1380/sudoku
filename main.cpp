@@ -59,7 +59,7 @@ int main(){
             do{
                 std::cout << "Choose an action (1-7): \n\t1. Enter a value to the table\n\t2. Remove a value from the table\n\t3. Undo Last Move \n\t4. Get Help (Fills one tile)\n\t5. Check puzzle\n\t6. Give Up\n\t7. Exit Sudoku" << std::endl;
                 std::cin >> sudokuOption;
-            }while(sudokuOption < 1 || sudokuOption > 6);
+            }while(sudokuOption < 1 || sudokuOption > 7);
 
             switch(sudokuOption){
                 case 1: // Enter value to location
