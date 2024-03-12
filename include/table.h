@@ -6,6 +6,7 @@
 class sudokuTable{
     std::vector<std::vector<int>> table;
     std::vector<std::vector<int>> solution;
+    std::vector<std::vector<int>> keyValues;
     int size;
     bool hasValidTable;
     enum difficulties{
@@ -23,16 +24,16 @@ class sudokuTable{
     
 public:
 
-    void enterValue(int,int,int);
+    bool enterValue(int,int,int);
     void createNewPuzzle();
     int getDifficulty();
     bool checkSolved();
     int getSize();
+    int getValue(int,int);
     void checkPuzzle();
     void checkRow(int);
     void checkCol(int);
     void checkTile(int, int);
-    std::vector<std::vector<int>> invalidSquares();
     sudokuTable(std::vector<std::vector<int>>&);
     sudokuTable(int);
     sudokuTable(const sudokuTable&);

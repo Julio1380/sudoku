@@ -12,6 +12,7 @@ sudokuTable::sudokuTable(int nums){
     size = nums;
     table = std::vector<std::vector<int>>(size,std::vector<int>(size,0));
     solution = std::vector<std::vector<int>>(size,std::vector<int>(size,0));
+    keyValues = std::vector<std::vector<int>>(size,std::vector<int>(size,0));
     hasValidTable = false;
 }
 
@@ -20,6 +21,7 @@ sudokuTable::sudokuTable(std::vector<std::vector<int>>& sourceTable){
     size = sourceTable.size();
     table = std::vector<std::vector<int>>(size,std::vector<int>(size,0));
     solution = std::vector<std::vector<int>>(size,std::vector<int>(size,0));
+    keyValues = std::vector<std::vector<int>>(size,std::vector<int>(size,0));
     for(int i = 0; i < size; ++i){
         for(int j = 0; j < size; ++j){
             table[i][j] = sourceTable[i][j];
@@ -38,6 +40,7 @@ sudokuTable& sudokuTable::operator=(const sudokuTable& other){
     size = other.size;
     table = std::vector<std::vector<int>>(size, std::vector<int>(size,0));
     solution = std::vector<std::vector<int>>(size,std::vector<int>(size,0));
+    keyValues = std::vector<std::vector<int>>(size,std::vector<int>(size,0));
     for(int i = 0; i < size; ++i){
         for(int j = 0; j < size; ++j){
             table[i][j] = other.table[i][j];
@@ -117,6 +120,7 @@ void sudokuTable::clearTable(){
         for(int j = 0; j < size; ++j){
             table[i][j] = 0;
             solution[i][j] = 0;
+            keyValues[i][j] = 0;
         }
     }
     hasValidTable = false;
@@ -191,11 +195,24 @@ void sudokuTable::generatePuzzle(){
     }else{
         rating = Hard;
     }
+
+    // Establishes key values to ensure puzzle integrity
+    for(int i = 0; i < size; ++i){
+        for(int j = 0; j < size; ++j){
+            if(table[i][j] != 0){
+                keyValues[i][j] = 1;
+            }
+        }
+    }
 }
 
-//Enters values into the table coordinates, modifies the table.
-void sudokuTable::enterValue(int value, int row, int col){
-    table[row][col] = value;
+//Enters values into the table coordinates, modifies the table. Returns bool about whether location is valid.
+bool sudokuTable::enterValue(int value, int row, int col){
+    if(keyValues[row][col] != 1){
+        table[row][col] = value;
+        return true;
+    }
+    return false;
 }
 
 //Clears the table and generates a new puzzle in the table. 
@@ -224,6 +241,10 @@ bool sudokuTable::checkSolved(){
 
 int sudokuTable::getSize(){
     return size;
+}
+
+int sudokuTable::getValue(int row, int col){
+    return table[row][col];
 }
 
 // Checks the working table for correctness, removes any errors
@@ -262,20 +283,6 @@ void sudokuTable::checkCol(int col){
     }
 }
 
-
-
-//Returns a table that shows all incorrect values
-std::vector<std::vector<int>> sudokuTable::invalidSquares(){
-    std::vector<std::vector<int>> invalid(size, std::vector<int>(size, 0));
-    for(int i = 0; i < size; ++i){
-        for(int j = 0; j < size; ++j){
-            if(table[i][j] != 0 && table[i][j] != solution[i][j]){
-                invalid[i][j] = 1;
-            }
-        }
-    }
-    return invalid;
-}
 
 //recursively go through the table, find empty (0) values and try every number to find the amount of solutions. Table is not modified as a result.
 void sudokuTable::solveTable(int row, int col, int& numSolutions){
@@ -335,9 +342,8 @@ void sudokuTable::getHint(){
     std::mt19937 newSeed(seed());
     std::uniform_int_distribution<std::mt19937::result_type> num(1,size);
     
-    int row = num(newSeed);
-    int col = num(newSeed);
-
+    int row = num(newSeed) -1;
+    int col = num(newSeed) -1;
     // Find an unsolved location
     while(table[row][col] != 0){
         col++;
